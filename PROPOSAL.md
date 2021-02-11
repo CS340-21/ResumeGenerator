@@ -17,7 +17,7 @@ Our team is very familiar with Rust, the web, and all of the technologies we pla
 The main demographic for a resume generator program is going to be unemployeed people seeking employment. Most people in this class will be in this demographic at some point in the next two years. This demographic values
 - A clean looking product
 - An intuitive GUI
-- A low commitment between using our project and ending up with our product.
+- Low time commitment
 - Free tools
 
 Our project will hit all of these goals. Ideally it will end up on a website allowing its users to forgo downloading anything other than their finished resume. The GUI should be easy to understand and self-explanatory. The user should be able to find our website and have their own HTML file within 10 minutes. They will just have to enter their data which gets shoved into pre-made HTML files.
