@@ -28,13 +28,14 @@ This project will be implemented using the Rust programming language. The reason
 
 Our program will consist of two parts: the binary and the library API. The library API will allow us to write platform independent implementations of the actual HTML generating portion of the resume that doesn't require a runtime. Then, on top of the API, the binary application will implement a GUI that _uses_ the library API. This way, the GUI and the resume generation are independent, and multiple frontend implementations are possible. If we choose to add a GUI implementation for a new platform, we can create a new binary that implements a new GUI on top of our API.
 
+![Flow Chart](assets/flow-chart.png)
+
 #### Competing Technologies
 
 1. Microsoft Word. Although this is often used for resume generation, it burdens the user with having to write the formatting themselves. It's a large time investment to write a resume in word.
 2. resume.io. This is an easier tool to use, but it requires creating an account, verifying email, and logging in to use the tool fully. It's doesn't grab peoples attention with its functionality as much as ours potentially could. Additionally, the website freezes when entering `a@a.a` as the email. Not exactly robust.
 3. resumebuilder.indeed.com. This tool is better than the previous tool, but doesn't offer any in-depth resume options; as of now, the website only has sections for work experience and skills for the majority of its templates.
 
-![Flow Chart](assets/flow-chart.png)
 
 ## **_IV_**. Team
 
