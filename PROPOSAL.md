@@ -46,7 +46,10 @@ Most other competing technologies cost money, have incomplete functionality, or 
 
 Our team is not new to writing projects like these, but one of our members has not used Rust extensively.
 
-All members of the team will contribute to each component, but Adam will focus more on the backend, while Colby will focus more on the frontend.
+Our members' roles are as follows:
+
+- Adam McDaniel: responsible for backend of the project
+- Colby Smith: responsible for frontend of the project
 
 ## **_V_**. Project Management
 Project meetings and management will be handled on Discord on a weekly basis. Here is a tentative schedule that will surely see changes over the course of the semester. We will follow the general guidelines from these dates and project goals.
