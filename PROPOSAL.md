@@ -53,7 +53,7 @@ Project meetings and management will be handled on Discord on a weekly basis. He
 This schedule should see the project get finished by the end of the semester. We are not interested in making a profit from this project, just making it public would be ideal. As long as we have a working project by the end of the semester, this schedule will have worked.
 ## References
 
-Formal resume definition and expectations [link](https://en.wikipedia.org/wiki/R%C3%A9sum%C3%A9 "Resume Wikipedia")
-Rust [link](https://www.rust-lang.org/ "Rust")
-Iced GUI for rust [link](https://news.ycombinator.com/item?id=22766639 "ICED")
+Formal resume definition and expectations outlined [here](https://en.wikipedia.org/wiki/R%C3%A9sum%C3%A9 "Resume Wikipedia")
+Rust [homepage](https://www.rust-lang.org/ "Rust"), [wikipedia](https://en.wikipedia.org/wiki/Rust_(programming_language))
+[Iced GUI for rust](https://news.ycombinator.com/item?id=22766639 "ICED")
 
