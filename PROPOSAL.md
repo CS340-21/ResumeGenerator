@@ -40,6 +40,8 @@ This structure has the added benefit of significantly reducing the risk of makin
 2. resume.io. This is an easier tool to use, but it requires creating an account, verifying email, and logging in to use the tool fully. It's doesn't grab peoples attention with its functionality as much as ours potentially could. Additionally, the website freezes when entering `a@a.a` as the email. Not exactly robust.
 3. resumebuilder.indeed.com. This tool is better than the previous tool, but doesn't offer any in-depth resume options; as of now, the website only has sections for work experience and skills for the majority of its templates.
 
+Most other competing technologies cost money, have incomplete functionality, or are not easy to use. These all deter people from using their product.
+
 ## **_IV_**. Team
 
 Our team is not new to writing projects like these, but one of our members has not used Rust extensively.
