@@ -32,7 +32,7 @@ Our program will consist of two parts: the binary and the library API. The libra
 
 ## **_IV_**. Team
 
-Our team is not new to writing projects like these, but one of our members has not used Rust before.
+Our team is not new to writing projects like these, but one of our members has not used Rust extensively.
 
 All members of the team will contribute to each component, but Adam will focus more on the backend, while Colby will focus more on the frontend.
 
