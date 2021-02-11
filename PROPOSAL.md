@@ -36,9 +36,9 @@ This structure has the added benefit of significantly reducing the risk of makin
 
 #### Competing Technologies
 
-1. Microsoft Word. Although this is often used for resume generation, it burdens the user with having to write the formatting themselves. It's a large time investment to write a resume in word.
-2. resume.io. This is an easier tool to use, but it requires creating an account, verifying email, and logging in to use the tool fully. It's doesn't grab peoples attention with its functionality as much as ours potentially could. Additionally, the website freezes when entering `a@a.a` as the email. Not exactly robust.
-3. resumebuilder.indeed.com. This tool is better than the previous tool, but doesn't offer any in-depth resume options; as of now, the website only has sections for work experience and skills for the majority of its templates.
+1. Microsoft Word. Although this is often used for resume generation, it burdens the user with having to write the formatting themselves. It's a large time investment to write a resume in word. Our project will be focused on resumes, and will not cost money for a subscription.
+2. resume.io. This is an easier tool to use, but it requires creating an account, verifying email, and logging in to use the tool fully. It's doesn't grab peoples attention with its functionality as much as ours potentially could. Additionally, the website freezes when entering `a@a.a` as the email. Not exactly robust. Ours will aim to be quick to use, sturdy, and not require any signups.
+3. resumebuilder.indeed.com. This tool is better than the previous tool, but doesn't offer any in-depth resume options; as of now, the website only has sections for work experience and skills for the majority of its templates. Ours will offer more sections that will be available for all templates, and will have more optional features such as adding ratings for proficiency in given skills, more detailed contact information, etc.
 
 Most other competing technologies cost money, have incomplete functionality, or are not easy to use. These all deter people from using their product.
 
