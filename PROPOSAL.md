@@ -30,12 +30,15 @@ Our program will consist of two parts: the binary and the library API. The libra
 
 ![Flow Chart](assets/flow-chart.png)
 
+#### Risk Management
+
+This structure has the added benefit of significantly reducing the risk of making changes to the project: changes in the binary can _only_ modify functionality of how the GUI interacts with the API, and changes in the library can _only_ modify how the API outputs HTML code. This is very good for managing risk when introducing changes to the code and the project in general.
+
 #### Competing Technologies
 
 1. Microsoft Word. Although this is often used for resume generation, it burdens the user with having to write the formatting themselves. It's a large time investment to write a resume in word.
 2. resume.io. This is an easier tool to use, but it requires creating an account, verifying email, and logging in to use the tool fully. It's doesn't grab peoples attention with its functionality as much as ours potentially could. Additionally, the website freezes when entering `a@a.a` as the email. Not exactly robust.
 3. resumebuilder.indeed.com. This tool is better than the previous tool, but doesn't offer any in-depth resume options; as of now, the website only has sections for work experience and skills for the majority of its templates.
-
 
 ## **_IV_**. Team
 
