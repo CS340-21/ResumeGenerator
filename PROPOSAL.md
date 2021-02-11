@@ -49,5 +49,6 @@ Project meetings and management will be handled on Discord on a weekly basis. He
 | Thursday, Apr. 1  | Submit iteration 3 status report                |                                                                          |
 | Friday, Apr. 9    | Final sprint                                    | Fix bugs, clean up project. add any more ideas we think of along the way |
 | Thursday, Apr. 15 | Submit project report and present final product |                                                                          |
+
 This schedule should see the project get finished by the end of the semester. We are not interested in making a profit from this project, just making it public would be ideal. As long as we have a working project by the end of the semester, this schedule will have worked.
 ## References
