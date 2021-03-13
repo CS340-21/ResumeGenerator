@@ -58,7 +58,7 @@ Project meetings and management will be handled on Discord on a weekly basis. He
 | Thursday, Feb. 18 | Begin work on project.                          | Have a single basic template resume to feed user input into              |
 | Friday, Feb. 26   | Second sprint                                   | Add a second template and allow the user to pick between the two         |
 | Thursday, Mar. 4  | Submit iteration 1 status report                |                                                                          |
-| Friday, Mar. 12   | Third sprint                                    | Upgrade from a commandline based project to having a basic GUI           |
+| Friday, Mar. 14   | Third sprint                                    | Upgrade from a commandline based project to having a basic GUI           |
 | Thursday, Mar. 18 | Submit iteration 2 status report                |                                                                          |
 | Friday, Mar. 26   | Fourth sprint                                   | Improve upon the GUI and make the whole project cleaner and more robust  |
 | Thursday, Apr. 1  | Submit iteration 3 status report                |                                                                          |
