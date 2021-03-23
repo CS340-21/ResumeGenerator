@@ -9,6 +9,9 @@ pub enum HTML {
     // Encloses the entire document
     Document(Vec<Self>),
 
+    // A nice div to hold other things in a fixed width
+    Container(Vec<Self>),
+
     Aligned(Box<Self>, HorizontalAlignment, VerticalAlignment),
 
     Row(Vec<Self>),
@@ -83,6 +86,10 @@ impl HTML {
         Self::Column(items.into_iter().map(Into::into).collect())
     }
 
+    pub fn container<T>(items: Vec<T>) -> Self where T: Into<HTML> {
+        Self::Container(items.into_iter().map(Into::into).collect())
+    }
+
     pub fn ol<T>(items: Vec<T>) -> Self where T: Into<HTML> {
         Self::OrderedList(items.into_iter().map(Into::into).collect())
     }
@@ -94,7 +101,10 @@ impl HTML {
     pub fn compile(&self, theme: &impl Theme) -> String {
         match self {
             Self::Document(contents) => {
-                format!("<html><head><link rel=\"stylesheet\" href=\"https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css\" integrity=\"sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T\" crossorigin=\"anonymous\"><script src=\"https://code.jquery.com/jquery-3.3.1.slim.min.js\" integrity=\"sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo\" crossorigin=\"anonymous\"></script><script src=\"https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js\" integrity=\"sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1\" crossorigin=\"anonymous\"></script><script src=\"https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js\" integrity=\"sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM\" crossorigin=\"anonymous\"></script></head><body>{}</body></html>",
+                format!("<!DOCTYPE html5><html><head><meta content=\"text/html;charset=utf-8\" http-equiv=\"Content-Type\"><meta content=\"utf-8\" http-equiv=\"encoding\"><link rel=\"stylesheet\" href=\"https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css\" integrity=\"sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T\" crossorigin=\"anonymous\"><script src=\"https://code.jquery.com/jquery-3.3.1.slim.min.js\" integrity=\"sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo\" crossorigin=\"anonymous\"></script><script src=\"https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js\" integrity=\"sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1\" crossorigin=\"anonymous\"></script><script src=\"https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js\" integrity=\"sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM\" crossorigin=\"anonymous\"></script><style>{}\nbody, div {{ color: {}; background-color: {}; }}</style></head><body>{}</body></html>",
+                theme.get_document_css(),
+                theme.get_color_hex(Color::DefaultForeground),
+                theme.get_color_hex(Color::DefaultBackground),
                 contents.iter()
                     .map(|i| i.compile(theme))
                     .collect::<Vec<String>>()
@@ -129,6 +139,7 @@ impl HTML {
                         .join("\n")
                 )
             }
+            
             Self::Column(items) => {
                 format!(
                     "<div class=\"col\">{}</div>",
@@ -138,6 +149,17 @@ impl HTML {
                             "<div class=\"row\">{}</div>",
                             i.compile(theme)
                         ))
+                        .collect::<Vec<String>>()
+                        .join("\n")
+                )
+            }
+            
+            Self::Container(items) => {
+                format!(
+                    "<div class=\"container\">{}</div>",
+                    items
+                        .iter()
+                        .map(|i| i.compile(theme))
                         .collect::<Vec<String>>()
                         .join("\n")
                 )
@@ -176,7 +198,7 @@ impl HTML {
             }
             
             Self::Title(title) => format!("<h1>{}</h1>", title),
-            Self::SectionTitle(title) => format!("<h3>{}</h3>", title),
+            Self::SectionTitle(title) => format!("<h4>{}</h4>", title),
             Self::Section(contents) => theme.compile_section_html(*contents.clone()),
             Self::Text(text) => format!("<p>{}</p>", text),
 
@@ -185,11 +207,11 @@ impl HTML {
             Self::Link(content, link) => format!("<a href=\"{}\">{}</a>", link, content.compile(theme)),
 
             Self::ColoredForeground(contents, color) => {
-                format!("<div color=\"{}\">{}</div>", theme.get_color_hex(*color), contents.compile(theme))
+                format!("<div style=\"color: {};\">{}</div>", theme.get_color_hex(*color), contents.compile(theme))
             }
-
+            
             Self::ColoredBackground(contents, color) => {
-                format!("<div background-color=\"{}\">{}</div>", theme.get_color_hex(*color), contents.compile(theme))
+                format!("<div style=\"background-color: {};\">{}</div>", theme.get_color_hex(*color), contents.compile(theme))
             }
 
             Self::FadeIn(_) => unimplemented!()

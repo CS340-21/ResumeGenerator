@@ -19,6 +19,8 @@ pub enum Color {
     Black,
     White,
     Grey,
+    DefaultForeground,
+    DefaultBackground,
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]
