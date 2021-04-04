@@ -1,4 +1,5 @@
 use super::{HTML, Color, HorizontalAlignment, VerticalAlignment};
+use core::fmt::{Display, Formatter, Error};
 
 #[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
 pub struct Work {
@@ -13,25 +14,26 @@ pub struct Work {
 
 #[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
 pub enum Degree {
-    AssociatesOf(String),
-    BachelorsOf(String),
-    MastersOf(String),
-    PhDOf(String),
+    Associates,
+    Bachelors,
+    Masters,
+    PhD,
     HighSchoolDiploma,
-
     Other(String),
+    None,
 }
 
-impl ToString for Degree {
-    fn to_string(&self) -> String {
-        match self {
-            Self::AssociatesOf(x) => format!("Associates degree of {}", x),
-            Self::BachelorsOf(x) => format!("Bachelors degree of {}", x),
-            Self::MastersOf(x) => format!("Masters degree of {}", x),
-            Self::PhDOf(x) => format!("PhD of {}", x),
+impl Display for Degree {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        write!(f, "{}", match self {
+            Self::Associates => String::from("Associates degree"),
+            Self::Bachelors => String::from("Bachelors degree"),
+            Self::Masters => String::from("Masters degree"),
+            Self::PhD => String::from("PhD"),
             Self::HighSchoolDiploma => String::from("high school diploma"),
-            Self::Other(x) => format!("{}", x),
-        }
+            Self::Other(x) => x.clone(),
+            Self::None => String::new(),
+        })
     }
 }
 
@@ -41,7 +43,8 @@ pub struct Education {
     pub end_year: u32,
 
     pub school: String,
-    pub degree: Option<Degree>,
+    pub field: Option<String>,
+    pub degree: Degree,
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]
@@ -53,15 +56,33 @@ pub enum Proficiency {
     Expert,
 }
 
-impl ToString for Proficiency {
-    fn to_string(&self) -> String {
-        match self {
-            Self::None => String::from("None"),
-            Self::Barely => String::from("Barely"),
-            Self::Some => String::from("Some"),
-            Self::Strong => String::from("Strong"),
-            Self::Expert => String::from("Expert"),
-        }
+impl Proficiency {
+    pub fn all() -> [Self; 5] {
+        [
+            Self::None,
+            Self::Barely,
+            Self::Some,
+            Self::Strong,
+            Self::Expert
+        ]
+    }
+}
+
+impl Display for Proficiency {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        write!(f, "{}", match self {
+            Self::None => "None",
+            Self::Barely => "Barely",
+            Self::Some => "Some",
+            Self::Strong => "Strong",
+            Self::Expert => "Expert",
+        })
+    }
+}
+
+impl From<Proficiency> for String {
+    fn from(prof: Proficiency) -> Self {
+        prof.to_string()
     }
 }
 
@@ -140,10 +161,19 @@ impl Resume {
                     HTML::section(HTML::col(vec![
                         HTML::aligned(HTML::fg(HTML::section_title("Education"), Color::Blue), HorizontalAlignment::Center, VerticalAlignment::SameAsParent),
                         HTML::ol(self.education.iter().map(|e| {
-                            if let Some(degree) = &e.degree {
-                                HTML::text(format!("Attended <b>{}</b> from <i>{}</i> to <i>{}</i> and acheived {}", e.school, e.start_year, e.end_year, degree.to_string()))
-                            } else {
-                                HTML::text(format!("Attended <b>{}</b> from <i>{}</i> to <i>{}</i>", e.school, e.start_year, e.end_year))
+                            match (&e.field, &e.degree) {
+                                (Some(field), Degree::None) => {
+                                    HTML::text(format!("Studied {} at <b>{}</b> from <i>{}</i> to <i>{}</i>", field, e.school, e.start_year, e.end_year))
+                                }
+                                (Some(field), degree) => {
+                                    HTML::text(format!("Studied {} at <b>{}</b> from <i>{}</i> to <i>{}</i> and acheived {}", field, e.school, e.start_year, e.end_year, degree.to_string()))
+                                }
+                                (None, Degree::None) => {
+                                    HTML::text(format!("Attended <b>{}</b> from <i>{}</i> to <i>{}</i>", e.school, e.start_year, e.end_year))
+                                }
+                                (None, degree) => {
+                                    HTML::text(format!("Attended <b>{}</b> from <i>{}</i> to <i>{}</i> and acheived {}", e.school, e.start_year, e.end_year, degree.to_string()))
+                                }
                             }
                         }).collect::<Vec<HTML>>()),
                         HTML::aligned(HTML::fg(HTML::section_title("Professional Experience"), Color::Blue), HorizontalAlignment::Center, VerticalAlignment::SameAsParent),

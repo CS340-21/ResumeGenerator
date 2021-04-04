@@ -10,3 +10,4 @@ name = "resume-gen"
 path = "src/main.rs"
 
 [dependencies]
+iced = "0.2.0"
