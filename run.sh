@@ -1,0 +1,1 @@
+FONTCONFIG_FILE=/etc/fonts cargo run

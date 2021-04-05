@@ -19,6 +19,9 @@ pub enum Color {
     Black,
     White,
     Grey,
+    DefaultTitle,
+    DefaultSectionTitle,
+    DefaultSubtitle,
     DefaultForeground,
     DefaultBackground,
 }

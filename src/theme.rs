@@ -16,10 +16,11 @@ pub trait Theme {
     // font-family: 'Merriweather', serif;
     font-family: 'Roboto', sans-serif;
 }
-"#.to_string()
+"#
+        .to_string()
     }
-    
-    fn compile_section_html(&self, content: HTML) -> String where Self: Sized {
-        format!("<div class=\"card\" style=\"height:100%; width:100%;\"><div class=\"card-body\" style=\"height:100%; width:100%;\">{}</div></div>", content.compile(self))
+
+    fn compile_section_html(&self, content: String) -> String {
+        format!("<div class=\"card\" style=\"height:100%; width:100%;\"><div class=\"card-body\" style=\"height:100%; width:100%;\">{}</div></div>", content)
     }
 }
