@@ -168,7 +168,10 @@ impl HTML {
                     "<div class=\"row no-gutters\">{}</div>",
                     items
                         .iter()
-                        .map(|i| format!("<div class=\"col no-gutters\">{}</div>", i.compile(theme)))
+                        .map(|i| format!(
+                            "<div class=\"col no-gutters\">{}</div>",
+                            i.compile(theme)
+                        ))
                         .collect::<Vec<String>>()
                         .join("\n")
                 )
@@ -179,7 +182,10 @@ impl HTML {
                     "<div class=\"col no-gutters\">{}</div>",
                     items
                         .iter()
-                        .map(|i| format!("<div class=\"row no-gutters\">{}</div>", i.compile(theme)))
+                        .map(|i| format!(
+                            "<div class=\"row no-gutters\">{}</div>",
+                            i.compile(theme)
+                        ))
                         .collect::<Vec<String>>()
                         .join("\n")
                 )

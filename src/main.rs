@@ -6,8 +6,8 @@ use iced::{
 };
 use resume::{Color, ContactInfo, Degree, Education, Proficiency, Resume, Theme, Work, HTML};
 use std::{
+    cmp::{max, min},
     fs::write,
-    cmp::{max, min}
 };
 
 pub struct DefaultTheme;
@@ -61,9 +61,9 @@ impl Theme for ForestTheme {
             Color::Yellow => (241, 250, 140),
             Color::Green => (80, 250, 123),
             Color::DefaultSectionTitle => (55, 150, 131), // #379683
-        
+
             Color::Blue | Color::DefaultBackground => (5, 56, 107), // #05386b
-            Color::DefaultTitle => (142, 228, 175), // #8ee4af
+            Color::DefaultTitle => (142, 228, 175),                 // #8ee4af
             Color::Violet => (189, 147, 249),
             Color::Grey => (68, 71, 90),
             Color::DefaultSubtitle => (219, 92, 162), // #5cdb95
@@ -77,7 +77,7 @@ impl Theme for ForestTheme {
 pub enum ThemeOption {
     Default,
     Dracula,
-    Forest
+    Forest,
 }
 
 impl From<ThemeOption> for String {
@@ -88,11 +88,7 @@ impl From<ThemeOption> for String {
 
 impl ThemeOption {
     fn all() -> [Self; 3] {
-        [
-            Self::Default,
-            Self::Dracula,
-            Self::Forest,
-        ]
+        [Self::Default, Self::Dracula, Self::Forest]
     }
 
     fn get_theme(&self) -> &dyn Theme {
@@ -247,7 +243,7 @@ pub enum Message {
     AddWork,
     AddSkill,
     SaveFile,
-    Clear
+    Clear,
 }
 
 #[derive(Debug, Clone)]
@@ -335,10 +331,10 @@ impl Steps {
         let mut profession = String::new();
         let mut description = String::new();
         let mut contact_info = ContactInfo {
-            email:    None,
-            phone:    None,
-            github:   None,
-            website:  None,
+            email: None,
+            phone: None,
+            github: None,
+            website: None,
             linkedin: None,
         };
         let mut skills = Vec::new();
@@ -348,7 +344,11 @@ impl Steps {
 
         for step in &self.steps {
             match step {
-                Step::Name { first_name: f, last_name: l, .. } => {
+                Step::Name {
+                    first_name: f,
+                    last_name: l,
+                    ..
+                } => {
                     first_name = f.clone();
                     last_name = l.clone();
                 }
@@ -364,7 +364,9 @@ impl Steps {
                 Step::Work { work_history, .. } => {
                     work_experience = work_history.clone();
                 }
-                Step::Education { education_history, .. } => {
+                Step::Education {
+                    education_history, ..
+                } => {
                     education = education_history.clone();
                 }
                 Step::End { theme: t, .. } => theme = *t,
@@ -380,8 +382,10 @@ impl Steps {
             contact_info,
             skills,
             work_experience,
-            education
-        }.generate().compile(theme.get_theme())
+            education,
+        }
+        .generate()
+        .compile(theme.get_theme())
     }
 
     fn title(&self) -> String {
@@ -579,29 +583,17 @@ impl<'a> Step {
                 }
             }
             Message::ThemeSelected(t) => {
-                if let Self::End {
-                    theme,
-                    ..
-                } = self
-                {
+                if let Self::End { theme, .. } = self {
                     *theme = t;
                 }
             }
             Message::SaveFileChanged(name) => {
-                if let Self::End {
-                    save_file,
-                    ..
-                } = self
-                {
+                if let Self::End { save_file, .. } = self {
                     *save_file = name;
                 }
             }
             Message::SaveFile => {
-                if let Self::End {
-                    save_file,
-                    ..
-                } = self
-                {
+                if let Self::End { save_file, .. } = self {
                     write(&save_file, steps.to_resume()).unwrap();
                 }
             }
@@ -679,75 +671,73 @@ impl<'a> Step {
                     *end_year_state = text_input::State::new();
                 }
             }
-            Message::Clear => {
-                match self {
-                    Self::Skills {
-                        skills,
-                        selection,
-                        text,
-                        text_state,
-                        ..
-                    } => {
-                        *skills = Vec::new();
-                        *selection = None;
-                        *text = String::new();
-                        *text_state = text_input::State::new();
-                    }
-                    Self::Education {
-                        education_history,
-                        school,
-                        school_state,
-                        field,
-                        field_state,
-                        degree,
-                        start_year,
-                        start_year_state,
-                        end_year,
-                        end_year_state,
-                        ..
-                    } => {
-                        *education_history = Vec::new();
-                        *school = String::new();
-                        *field = String::new();
-                        *degree = None;
-                        *start_year = String::new();
-                        *end_year = String::new();
-
-                        *school_state = text_input::State::new();
-                        *field_state = text_input::State::new();
-                        *start_year_state = text_input::State::new();
-                        *end_year_state = text_input::State::new();
-                    }
-                    Self::Work {
-                        work_history,
-                        company,
-                        company_state,
-                        position,
-                        position_state,
-                        description,
-                        description_state,
-                        start_year,
-                        start_year_state,
-                        end_year,
-                        end_year_state,
-                        ..
-                    } => {
-                        *work_history = Vec::new();
-                        *company = String::new();
-                        *position = String::new();
-                        *description = String::new();
-                        *start_year = String::new();
-                        *end_year = String::new();
-
-                        *company_state = text_input::State::new();
-                        *position_state = text_input::State::new();
-                        *description_state = text_input::State::new();
-                        *start_year_state = text_input::State::new();
-                        *end_year_state = text_input::State::new();
-                    }
-                    _ => unreachable!()
+            Message::Clear => match self {
+                Self::Skills {
+                    skills,
+                    selection,
+                    text,
+                    text_state,
+                    ..
+                } => {
+                    *skills = Vec::new();
+                    *selection = None;
+                    *text = String::new();
+                    *text_state = text_input::State::new();
                 }
-            }
+                Self::Education {
+                    education_history,
+                    school,
+                    school_state,
+                    field,
+                    field_state,
+                    degree,
+                    start_year,
+                    start_year_state,
+                    end_year,
+                    end_year_state,
+                    ..
+                } => {
+                    *education_history = Vec::new();
+                    *school = String::new();
+                    *field = String::new();
+                    *degree = None;
+                    *start_year = String::new();
+                    *end_year = String::new();
+
+                    *school_state = text_input::State::new();
+                    *field_state = text_input::State::new();
+                    *start_year_state = text_input::State::new();
+                    *end_year_state = text_input::State::new();
+                }
+                Self::Work {
+                    work_history,
+                    company,
+                    company_state,
+                    position,
+                    position_state,
+                    description,
+                    description_state,
+                    start_year,
+                    start_year_state,
+                    end_year,
+                    end_year_state,
+                    ..
+                } => {
+                    *work_history = Vec::new();
+                    *company = String::new();
+                    *position = String::new();
+                    *description = String::new();
+                    *start_year = String::new();
+                    *end_year = String::new();
+
+                    *company_state = text_input::State::new();
+                    *position_state = text_input::State::new();
+                    *description_state = text_input::State::new();
+                    *start_year_state = text_input::State::new();
+                    *end_year_state = text_input::State::new();
+                }
+                _ => unreachable!(),
+            },
             Message::NextPressed | Message::BackPressed => {}
         }
     }
@@ -777,14 +767,19 @@ impl<'a> Step {
             Self::Profession { text, .. } | Self::Description { text, .. } => !text.is_empty(),
             Self::Education { .. } => true,
             Self::Work { .. } => true,
-            Self::End { .. }=> false,
+            Self::End { .. } => false,
         }
     }
 
     fn view(&mut self, app: &App) -> Element<Message> {
         match self {
             Self::Welcome => Self::welcome(),
-            Self::End { theme, save_file, save_file_state, button_state } => Self::end(Some(*theme), save_file, save_file_state, button_state, app),
+            Self::End {
+                theme,
+                save_file,
+                save_file_state,
+                button_state,
+            } => Self::end(Some(*theme), save_file, save_file_state, button_state, app),
             Self::Name {
                 first_name,
                 last_name,
@@ -799,8 +794,15 @@ impl<'a> Step {
                 selection,
                 text_state,
                 button_state,
-                clear_state
-            } => Self::skills(&skills, text, *selection, text_state, button_state, clear_state),
+                clear_state,
+            } => Self::skills(
+                &skills,
+                text,
+                *selection,
+                text_state,
+                button_state,
+                clear_state,
+            ),
             Self::Education {
                 education_history,
 
@@ -816,7 +818,7 @@ impl<'a> Step {
                 school_state,
 
                 button_state,
-                clear_state
+                clear_state,
             } => Self::education(
                 education_history,
                 *degree,
@@ -829,7 +831,7 @@ impl<'a> Step {
                 school,
                 school_state,
                 button_state,
-                clear_state
+                clear_state,
             ),
             Self::Work {
                 work_history,
@@ -844,7 +846,7 @@ impl<'a> Step {
                 end_year,
                 end_year_state,
                 button_state,
-                clear_state
+                clear_state,
             } => Self::work(
                 work_history,
                 company,
@@ -858,7 +860,7 @@ impl<'a> Step {
                 end_year,
                 end_year_state,
                 button_state,
-                clear_state
+                clear_state,
             ),
             _ => unreachable!(),
         }
@@ -869,19 +871,24 @@ impl<'a> Step {
         Column::new().spacing(20).push(Text::new(title).size(50))
     }
 
-    fn end(selection: Option<ThemeOption>, save_file: &str, save_file_state: &'a mut text_input::State , button_state: &'a mut button::State, app: &App) -> Column<'a, Message> {
-        let theme_input = Column::new()
-            .push(ThemeOption::all().iter().cloned().fold(
-                Column::new().padding(10).spacing(20),
-                |choices, option| {
-                    choices.push(Radio::new(
-                        option,
-                        option,
-                        selection,
-                        Message::ThemeSelected,
-                    ))
-                },
-            ));
+    fn end(
+        selection: Option<ThemeOption>,
+        save_file: &str,
+        save_file_state: &'a mut text_input::State,
+        button_state: &'a mut button::State,
+        app: &App,
+    ) -> Column<'a, Message> {
+        let theme_input = Column::new().push(ThemeOption::all().iter().cloned().fold(
+            Column::new().padding(10).spacing(20),
+            |choices, option| {
+                choices.push(Radio::new(
+                    option,
+                    option,
+                    selection,
+                    Message::ThemeSelected,
+                ))
+            },
+        ));
 
         let text_input = TextInput::new(
             save_file_state,
@@ -898,10 +905,11 @@ impl<'a> Step {
             .push(theme_input)
             .push(Text::new("Where do you want to save your resume?"))
             .push(text_input)
-
-            .push(button(button_state, "Save")
-            .on_press(Message::SaveFile)
-            .style(style::Button::Primary))
+            .push(
+                button(button_state, "Save")
+                    .on_press(Message::SaveFile)
+                    .style(style::Button::Primary),
+            )
     }
 
     fn work(
@@ -997,24 +1005,35 @@ impl<'a> Step {
             .push(Text::new("Describe your work"))
             .push(description_input);
 
-
-        if !position.is_empty() && !company.is_empty() && !description.is_empty() && start_year.parse::<u32>().and(end_year.parse::<u32>()).is_ok() {
+        if !position.is_empty()
+            && !company.is_empty()
+            && !description.is_empty()
+            && start_year
+                .parse::<u32>()
+                .and(end_year.parse::<u32>())
+                .is_ok()
+        {
             result.push(
                 Row::new()
-                    .push(button(clear_state, "Clear")
-                    .on_press(Message::Clear)
-                    .style(style::Button::Secondary))
+                    .push(
+                        button(clear_state, "Clear")
+                            .on_press(Message::Clear)
+                            .style(style::Button::Secondary),
+                    )
                     .push(Space::with_width(Length::Fill))
-                    .push(button(button_state, "Add Work")
-                    .on_press(Message::AddWork)
-                    .style(style::Button::Primary))
+                    .push(
+                        button(button_state, "Add Work")
+                            .on_press(Message::AddWork)
+                            .style(style::Button::Primary),
+                    ),
             )
         } else {
             result.push(
-                Row::new()
-                    .push(button(clear_state, "Clear")
-                    .on_press(Message::Clear)
-                    .style(style::Button::Secondary))
+                Row::new().push(
+                    button(clear_state, "Clear")
+                        .on_press(Message::Clear)
+                        .style(style::Button::Secondary),
+                ),
             )
         }
     }
@@ -1083,14 +1102,15 @@ impl<'a> Step {
                 .size(20),
             );
 
-        let degree_input = Column::new()
-            .spacing(10)
-            .push(Degree::all().iter().cloned().fold(
-                Column::new().padding(10).spacing(20),
-                |choices, prof| {
-                    choices.push(Radio::new(prof, prof, degree, Message::DegreeSelected))
-                },
-            ));
+        let degree_input =
+            Column::new()
+                .spacing(10)
+                .push(Degree::all().iter().cloned().fold(
+                    Column::new().padding(10).spacing(20),
+                    |choices, prof| {
+                        choices.push(Radio::new(prof, prof, degree, Message::DegreeSelected))
+                    },
+                ));
 
         let result = Self::container("Education History")
             .push(
@@ -1110,23 +1130,33 @@ impl<'a> Step {
             .push(Text::new("What degree did you receive?"))
             .push(degree_input);
 
-        if !school.is_empty() && start_year.parse::<u32>().and(end_year.parse::<u32>()).is_ok() {
+        if !school.is_empty()
+            && start_year
+                .parse::<u32>()
+                .and(end_year.parse::<u32>())
+                .is_ok()
+        {
             result.push(
                 Row::new()
-                    .push(button(clear_state, "Clear")
-                    .on_press(Message::Clear)
-                    .style(style::Button::Secondary))
+                    .push(
+                        button(clear_state, "Clear")
+                            .on_press(Message::Clear)
+                            .style(style::Button::Secondary),
+                    )
                     .push(Space::with_width(Length::Fill))
-                    .push(button(button_state, "Add Education")
-                    .on_press(Message::AddEducation)
-                    .style(style::Button::Primary))
+                    .push(
+                        button(button_state, "Add Education")
+                            .on_press(Message::AddEducation)
+                            .style(style::Button::Primary),
+                    ),
             )
         } else {
             result.push(
-                Row::new()
-                    .push(button(clear_state, "Clear")
-                    .on_press(Message::Clear)
-                    .style(style::Button::Secondary))
+                Row::new().push(
+                    button(clear_state, "Clear")
+                        .on_press(Message::Clear)
+                        .style(style::Button::Secondary),
+                ),
             )
         }
     }
@@ -1149,19 +1179,20 @@ impl<'a> Step {
         .width(Length::Fill)
         .size(30);
 
-        let proficiency_input = Column::new()
-            .spacing(10)
-            .push(Proficiency::all().iter().cloned().fold(
-                Column::new().padding(10).spacing(20),
-                |choices, prof| {
-                    choices.push(Radio::new(
-                        prof,
-                        prof,
-                        selection,
-                        Message::ProficiencySelected,
-                    ))
-                },
-            ));
+        let proficiency_input =
+            Column::new()
+                .spacing(10)
+                .push(Proficiency::all().iter().cloned().fold(
+                    Column::new().padding(10).spacing(20),
+                    |choices, prof| {
+                        choices.push(Radio::new(
+                            prof,
+                            prof,
+                            selection,
+                            Message::ProficiencySelected,
+                        ))
+                    },
+                ));
 
         let result = Self::container("Skills")
             .push(Text::new("Add some skills to your resume"))
@@ -1170,31 +1201,42 @@ impl<'a> Step {
                     .iter()
                     .cloned()
                     .fold(Column::new(), |items, (text, proficiency)| {
-                        items.push(Text::new(format!("{}: {}", text, match proficiency {Some(p) => p.to_string().to_lowercase(), None => "none".to_string()})))
+                        items.push(Text::new(format!(
+                            "{}: {}",
+                            text,
+                            match proficiency {
+                                Some(p) => p.to_string().to_lowercase(),
+                                None => "none".to_string(),
+                            }
+                        )))
                     }),
             )
             .push(text_input)
             .push(Text::new("What's your proficiency?"))
             .push(proficiency_input);
 
-
         if !text.is_empty() {
             result.push(
                 Row::new()
-                    .push(button(clear_state, "Clear")
-                    .on_press(Message::Clear)
-                    .style(style::Button::Secondary))
+                    .push(
+                        button(clear_state, "Clear")
+                            .on_press(Message::Clear)
+                            .style(style::Button::Secondary),
+                    )
                     .push(Space::with_width(Length::Fill))
-                    .push(button(button_state, "Add Skill")
-                        .on_press(Message::AddSkill)
-                        .style(style::Button::Primary))
+                    .push(
+                        button(button_state, "Add Skill")
+                            .on_press(Message::AddSkill)
+                            .style(style::Button::Primary),
+                    ),
             )
         } else {
             result.push(
-                Row::new()
-                    .push(button(clear_state, "Clear")
-                    .on_press(Message::Clear)
-                    .style(style::Button::Secondary))
+                Row::new().push(
+                    button(clear_state, "Clear")
+                        .on_press(Message::Clear)
+                        .style(style::Button::Secondary),
+                ),
             )
         }
     }
@@ -1358,7 +1400,6 @@ fn main() {
 
                     company: "University of Tennessee, Knoxville".to_string(),
                     position: "Official University Software Vendor".to_string(),
-
                     description: r#"Helped develop Simulated Electronic Fetal Monitoring app in JavaScript, and rewrote the application in Dart to run natively on mobile and desktop."#.to_string()
                 },
                 Work {
@@ -1367,7 +1408,6 @@ fn main() {
 
                     company: "Oak Ridge National Laboratory".to_string(),
                     position: "Software Developer Intern".to_string(),
-                    
                     description: r#"Developed Rusty-CI, a general purpose GitHub and GitLab continuous integration tool, and multiple components of ASGarD (Adaptive Sparse Grid Discretization), a partial differential equation solver designed to run on exascale architectures."#.to_string()
                 },
             ]
