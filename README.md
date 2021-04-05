@@ -2,7 +2,7 @@
 
 A cross platform and free resume generating tool.
 
-![Demo](./assets/demo.gif)
+<img src="./assets/demo.gif" width="48%"/>
 
 ## Example Output
 
