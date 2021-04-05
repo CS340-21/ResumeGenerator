@@ -1,4 +1,4 @@
-use super::{Theme, Color, Direction, HorizontalAlignment, VerticalAlignment};
+use super::{Color, Direction, HorizontalAlignment, Theme, VerticalAlignment};
 
 // The actual internal structure that is directly 1:1 with the output code.
 // When the program finally inserts the user data into the resume, the
@@ -18,7 +18,6 @@ pub enum HTML {
     Column(Vec<Self>),
 
     // Aligned(Box<Self>, HorizontalAlignment, VerticalAlignment),
-
     Text(String),
     Title(String),
     SectionTitle(String),
@@ -64,44 +63,79 @@ impl HTML {
         Self::Aligned(Box::new(contents), hori, vert)
     }
 
-    pub fn title(title: impl ToString) -> Self { Self::Title(title.to_string()) }
-    pub fn section_title(title: impl ToString) -> Self { Self::SectionTitle(title.to_string()) }
+    pub fn title(title: impl ToString) -> Self {
+        Self::Title(title.to_string())
+    }
+    pub fn section_title(title: impl ToString) -> Self {
+        Self::SectionTitle(title.to_string())
+    }
 
-    pub fn text(text: impl ToString) -> Self { Self::Text(text.to_string()) }
-    pub fn rect(content: Self, border_radius: u32, color: Color) -> Self { Self::Rectangle(Box::new(content), border_radius, color) }
+    pub fn text(text: impl ToString) -> Self {
+        Self::Text(text.to_string())
+    }
+    pub fn rect(content: Self, border_radius: u32, color: Color) -> Self {
+        Self::Rectangle(Box::new(content), border_radius, color)
+    }
 
-    pub fn section(content: Self) -> Self { Self::Section(Box::new(content)) }
-    pub fn italics(content: Self) -> Self { Self::Italics(Box::new(content)) }
-    pub fn bold(content: Self) -> Self { Self::Bold(Box::new(content)) }
-    pub fn link(content: Self, link: impl ToString) -> Self { Self::Link(Box::new(content), link.to_string()) }
-    
-    pub fn fg(content: Self, color: Color) -> Self { Self::ColoredForeground(Box::new(content), color) }
-    pub fn bg(content: Self, color: Color) -> Self { Self::ColoredBackground(Box::new(content), color) }
+    pub fn section(content: Self) -> Self {
+        Self::Section(Box::new(content))
+    }
+    pub fn italics(content: Self) -> Self {
+        Self::Italics(Box::new(content))
+    }
+    pub fn bold(content: Self) -> Self {
+        Self::Bold(Box::new(content))
+    }
+    pub fn link(content: Self, link: impl ToString) -> Self {
+        Self::Link(Box::new(content), link.to_string())
+    }
 
-    pub fn row<T>(items: Vec<T>) -> Self where T: Into<HTML> {
+    pub fn fg(content: Self, color: Color) -> Self {
+        Self::ColoredForeground(Box::new(content), color)
+    }
+    pub fn bg(content: Self, color: Color) -> Self {
+        Self::ColoredBackground(Box::new(content), color)
+    }
+
+    pub fn row<T>(items: Vec<T>) -> Self
+    where
+        T: Into<HTML>,
+    {
         Self::Row(items.into_iter().map(Into::into).collect())
     }
 
-    pub fn col<T>(items: Vec<T>) -> Self where T: Into<HTML> {
+    pub fn col<T>(items: Vec<T>) -> Self
+    where
+        T: Into<HTML>,
+    {
         Self::Column(items.into_iter().map(Into::into).collect())
     }
 
-    pub fn container<T>(items: Vec<T>) -> Self where T: Into<HTML> {
+    pub fn container<T>(items: Vec<T>) -> Self
+    where
+        T: Into<HTML>,
+    {
         Self::Container(items.into_iter().map(Into::into).collect())
     }
 
-    pub fn ol<T>(items: Vec<T>) -> Self where T: Into<HTML> {
+    pub fn ol<T>(items: Vec<T>) -> Self
+    where
+        T: Into<HTML>,
+    {
         Self::OrderedList(items.into_iter().map(Into::into).collect())
     }
 
-    pub fn ul<T>(items: Vec<T>) -> Self where T: Into<HTML> {
+    pub fn ul<T>(items: Vec<T>) -> Self
+    where
+        T: Into<HTML>,
+    {
         Self::UnorderedList(items.into_iter().map(Into::into).collect())
     }
 
-    pub fn compile(&self, theme: &impl Theme) -> String {
+    pub fn compile(&self, theme: &dyn Theme) -> String {
         match self {
             Self::Document(contents) => {
-                format!("<!DOCTYPE html5><html><head><meta content=\"text/html;charset=utf-8\" http-equiv=\"Content-Type\"><meta content=\"utf-8\" http-equiv=\"encoding\"><link rel=\"stylesheet\" href=\"https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css\" integrity=\"sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T\" crossorigin=\"anonymous\"><script src=\"https://code.jquery.com/jquery-3.3.1.slim.min.js\" integrity=\"sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo\" crossorigin=\"anonymous\"></script><script src=\"https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js\" integrity=\"sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1\" crossorigin=\"anonymous\"></script><script src=\"https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js\" integrity=\"sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM\" crossorigin=\"anonymous\"></script><style>{}\nbody, div {{ color: {}; background-color: {}; }}</style></head><body>{}</body></html>",
+                format!("<!DOCTYPE html5><html><head><meta content=\"text/html;charset=utf-8\" http-equiv=\"Content-Type\"><meta content=\"utf-8\" http-equiv=\"encoding\"><link rel=\"stylesheet\" href=\"https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css\" integrity=\"sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T\" crossorigin=\"anonymous\"><script src=\"https://code.jquery.com/jquery-3.3.1.slim.min.js\" integrity=\"sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo\" crossorigin=\"anonymous\"></script><script src=\"https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js\" integrity=\"sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1\" crossorigin=\"anonymous\"></script><script src=\"https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js\" integrity=\"sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM\" crossorigin=\"anonymous\"></script><style>{}\nbody, div {{ color: {}; background-color: {}; }}</style></head><body><br><br><br><br><br><br>{}<br><br><br><br><br><br></body></html>",
                 theme.get_document_css(),
                 theme.get_color_hex(Color::DefaultForeground),
                 theme.get_color_hex(Color::DefaultBackground),
@@ -131,29 +165,26 @@ impl HTML {
 
             Self::Row(items) => {
                 format!(
-                    "<div class=\"row\">{}</div>",
+                    "<div class=\"row no-gutters\">{}</div>",
                     items
                         .iter()
-                        .map(|i| format!("<div class=\"col\">{}</div>", i.compile(theme)))
+                        .map(|i| format!("<div class=\"col no-gutters\">{}</div>", i.compile(theme)))
                         .collect::<Vec<String>>()
                         .join("\n")
                 )
             }
-            
+
             Self::Column(items) => {
                 format!(
-                    "<div class=\"col\">{}</div>",
+                    "<div class=\"col no-gutters\">{}</div>",
                     items
                         .iter()
-                        .map(|i| format!(
-                            "<div class=\"row\">{}</div>",
-                            i.compile(theme)
-                        ))
+                        .map(|i| format!("<div class=\"row no-gutters\">{}</div>", i.compile(theme)))
                         .collect::<Vec<String>>()
                         .join("\n")
                 )
             }
-            
+
             Self::Container(items) => {
                 format!(
                     "<div class=\"container\">{}</div>",
@@ -170,10 +201,7 @@ impl HTML {
                     "<ol style=\"width:100%\">{}</ol>",
                     items
                         .iter()
-                        .map(|i| format!(
-                            "<li>{}</li>",
-                            i.compile(theme)
-                        ))
+                        .map(|i| format!("<li>{}</li>", i.compile(theme)))
                         .collect::<Vec<String>>()
                         .join("\n")
                 )
@@ -184,37 +212,49 @@ impl HTML {
                     "<ul style=\"width:100%\">{}</ul>",
                     items
                         .iter()
-                        .map(|i| format!(
-                            "<li>{}</li>",
-                            i.compile(theme)
-                        ))
+                        .map(|i| format!("<li>{}</li>", i.compile(theme)))
                         .collect::<Vec<String>>()
                         .join("\n")
                 )
             }
 
             Self::Rectangle(contents, border_radius, color) => {
-                format!("<div style=\"height:100%; border-radius: {}%; background-color:{}\">{}</div>", border_radius, theme.get_color_hex(*color), contents.compile(theme))
+                format!(
+                    "<div style=\"height:100%; border-radius: {}%; background-color:{}\">{}</div>",
+                    border_radius,
+                    theme.get_color_hex(*color),
+                    contents.compile(theme)
+                )
             }
-            
+
             Self::Title(title) => format!("<h1>{}</h1>", title),
             Self::SectionTitle(title) => format!("<h4>{}</h4>", title),
-            Self::Section(contents) => theme.compile_section_html(*contents.clone()),
+            Self::Section(contents) => theme.compile_section_html(contents.compile(theme)),
             Self::Text(text) => format!("<p>{}</p>", text),
 
             Self::Italics(x) => format!("<i>{}</i>", x.compile(theme)),
             Self::Bold(x) => format!("<b>{}</b>", x.compile(theme)),
-            Self::Link(content, link) => format!("<a href=\"{}\">{}</a>", link, content.compile(theme)),
+            Self::Link(content, link) => {
+                format!("<a href=\"{}\">{}</a>", link, content.compile(theme))
+            }
 
             Self::ColoredForeground(contents, color) => {
-                format!("<div style=\"color: {};\">{}</div>", theme.get_color_hex(*color), contents.compile(theme))
-            }
-            
-            Self::ColoredBackground(contents, color) => {
-                format!("<div style=\"background-color: {};\">{}</div>", theme.get_color_hex(*color), contents.compile(theme))
+                format!(
+                    "<div style=\"color: {};\">{}</div>",
+                    theme.get_color_hex(*color),
+                    contents.compile(theme)
+                )
             }
 
-            Self::FadeIn(_) => unimplemented!()
+            Self::ColoredBackground(contents, color) => {
+                format!(
+                    "<div style=\"background-color: {};\">{}</div>",
+                    theme.get_color_hex(*color),
+                    contents.compile(theme)
+                )
+            }
+
+            Self::FadeIn(_) => unimplemented!(),
         }
     }
 }

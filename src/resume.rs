@@ -1,5 +1,5 @@
-use super::{HTML, Color, HorizontalAlignment, VerticalAlignment};
-use core::fmt::{Display, Formatter, Error};
+use super::{Color, HorizontalAlignment, VerticalAlignment, HTML};
+use core::fmt::{Display, Error, Formatter};
 
 #[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
 pub struct Work {
@@ -9,31 +9,49 @@ pub struct Work {
     pub position: String,
     pub company: String,
 
-    pub description: String
+    pub description: String,
 }
 
-#[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]
 pub enum Degree {
     Associates,
     Bachelors,
     Masters,
     PhD,
     HighSchoolDiploma,
-    Other(String),
-    None,
+}
+
+impl Degree {
+    pub fn all() -> [Self; 5] {
+        [
+            Self::HighSchoolDiploma,
+            Self::Associates,
+            Self::Bachelors,
+            Self::Masters,
+            Self::PhD,
+        ]
+    }
 }
 
 impl Display for Degree {
     fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-        write!(f, "{}", match self {
-            Self::Associates => String::from("Associates degree"),
-            Self::Bachelors => String::from("Bachelors degree"),
-            Self::Masters => String::from("Masters degree"),
-            Self::PhD => String::from("PhD"),
-            Self::HighSchoolDiploma => String::from("high school diploma"),
-            Self::Other(x) => x.clone(),
-            Self::None => String::new(),
-        })
+        write!(
+            f,
+            "{}",
+            match self {
+                Self::Associates => String::from("Associates degree"),
+                Self::Bachelors => String::from("Bachelors degree"),
+                Self::Masters => String::from("Masters degree"),
+                Self::PhD => String::from("PhD"),
+                Self::HighSchoolDiploma => String::from("High School diploma"),
+            }
+        )
+    }
+}
+
+impl From<Degree> for String {
+    fn from(deg: Degree) -> Self {
+        deg.to_string()
     }
 }
 
@@ -44,7 +62,7 @@ pub struct Education {
 
     pub school: String,
     pub field: Option<String>,
-    pub degree: Degree,
+    pub degree: Option<Degree>,
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]
@@ -63,20 +81,24 @@ impl Proficiency {
             Self::Barely,
             Self::Some,
             Self::Strong,
-            Self::Expert
+            Self::Expert,
         ]
     }
 }
 
 impl Display for Proficiency {
     fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-        write!(f, "{}", match self {
-            Self::None => "None",
-            Self::Barely => "Barely",
-            Self::Some => "Some",
-            Self::Strong => "Strong",
-            Self::Expert => "Expert",
-        })
+        write!(
+            f,
+            "{}",
+            match self {
+                Self::None => "None",
+                Self::Barely => "Barely",
+                Self::Some => "Some",
+                Self::Strong => "Strong",
+                Self::Expert => "Expert",
+            }
+        )
     }
 }
 
@@ -89,9 +111,9 @@ impl From<Proficiency> for String {
 impl From<Proficiency> for u32 {
     fn from(level: Proficiency) -> Self {
         match level {
-            Proficiency::None   => 0,
+            Proficiency::None => 0,
             Proficiency::Barely => 1,
-            Proficiency::Some   => 2,
+            Proficiency::Some => 2,
             Proficiency::Strong => 3,
             Proficiency::Expert => 4,
         }
@@ -100,10 +122,10 @@ impl From<Proficiency> for u32 {
 
 #[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
 pub struct ContactInfo {
-    pub email:    Option<String>,
-    pub phone:    Option<String>,
-    pub website:  Option<String>,
-    pub github:   Option<String>,
+    pub email: Option<String>,
+    pub phone: Option<String>,
+    pub website: Option<String>,
+    pub github: Option<String>,
     pub linkedin: Option<String>,
 }
 
@@ -118,7 +140,7 @@ pub struct Resume {
     pub profession: String,
     pub skills: Vec<(String, Option<Proficiency>)>,
     pub education: Vec<Education>,
-    pub work_experience: Vec<Work>
+    pub work_experience: Vec<Work>,
 }
 
 impl Resume {
@@ -129,12 +151,12 @@ impl Resume {
                     HTML::row(vec![
                         HTML::section(HTML::col(vec![
                             HTML::aligned(
-                                HTML::fg(HTML::title(format!("{} {}", self.first_name, self.last_name)), Color::Violet),
+                                HTML::fg(HTML::title(format!("{} {}", self.first_name, self.last_name)), Color::DefaultTitle),
                                 HorizontalAlignment::Center,
                                 VerticalAlignment::SameAsParent
                             ),
                             HTML::aligned(
-                                HTML::fg(HTML::italics(HTML::section_title(&self.profession)), Color::Pink),
+                                HTML::fg(HTML::italics(HTML::section_title(&self.profession)), Color::DefaultSubtitle),
                                 HorizontalAlignment::Center,
                                 VerticalAlignment::SameAsParent
                             ),
@@ -143,7 +165,7 @@ impl Resume {
                         ])),
                         HTML::section(HTML::col(vec![
                             HTML::aligned(
-                                HTML::fg(HTML::italics(HTML::section_title("Skills")), Color::Pink),
+                                HTML::fg(HTML::italics(HTML::section_title("Skills")), Color::DefaultSubtitle),
                                 HorizontalAlignment::Center,
                                 VerticalAlignment::SameAsParent
                             ),
@@ -159,26 +181,26 @@ impl Resume {
                         // HTML::section(HTML::aligned(HTML::text("hello world!"), HorizontalAlignment::Center, VerticalAlignment::Center)),
                     ]),
                     HTML::section(HTML::col(vec![
-                        HTML::aligned(HTML::fg(HTML::section_title("Education"), Color::Blue), HorizontalAlignment::Center, VerticalAlignment::SameAsParent),
+                        HTML::aligned(HTML::fg(HTML::section_title("Education"), Color::DefaultSectionTitle), HorizontalAlignment::Center, VerticalAlignment::SameAsParent),
                         HTML::ol(self.education.iter().map(|e| {
                             match (&e.field, &e.degree) {
-                                (Some(field), Degree::None) => {
+                                (Some(field), None) => {
                                     HTML::text(format!("Studied {} at <b>{}</b> from <i>{}</i> to <i>{}</i>", field, e.school, e.start_year, e.end_year))
                                 }
-                                (Some(field), degree) => {
+                                (Some(field), Some(degree)) => {
                                     HTML::text(format!("Studied {} at <b>{}</b> from <i>{}</i> to <i>{}</i> and acheived {}", field, e.school, e.start_year, e.end_year, degree.to_string()))
                                 }
-                                (None, Degree::None) => {
+                                (None, None) => {
                                     HTML::text(format!("Attended <b>{}</b> from <i>{}</i> to <i>{}</i>", e.school, e.start_year, e.end_year))
                                 }
-                                (None, degree) => {
+                                (None, Some(degree)) => {
                                     HTML::text(format!("Attended <b>{}</b> from <i>{}</i> to <i>{}</i> and acheived {}", e.school, e.start_year, e.end_year, degree.to_string()))
                                 }
                             }
                         }).collect::<Vec<HTML>>()),
-                        HTML::aligned(HTML::fg(HTML::section_title("Professional Experience"), Color::Blue), HorizontalAlignment::Center, VerticalAlignment::SameAsParent),
+                        HTML::aligned(HTML::fg(HTML::section_title("Professional Experience"), Color::DefaultSectionTitle), HorizontalAlignment::Center, VerticalAlignment::SameAsParent),
                         HTML::ul(self.work_experience.iter().map(|j| {
-                            HTML::text(format!("<b>{}</b> at {} from <i>{}</i> to <i>{}</i>", j.position, j.company, j.start_year, j.end_year))
+                            HTML::text(format!("<b>{}</b> at {} from <i>{}</i> to <i>{}</i>. {}", j.position, j.company, j.start_year, j.end_year, j.description))
                         }).collect::<Vec<HTML>>())
                     ])),
                 ])
