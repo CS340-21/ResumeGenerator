@@ -37,9 +37,7 @@ The main demographic for a resume generator program is unemployed people seeking
 - Low time commitment
 - Free tools
 
-All of which our program offers!
-
-There were no changes from the original project proposal.
+All of which our program offers. There were no changes from the original project proposal.
 
 ## ***III***. Technology
 
