@@ -31,11 +31,13 @@ Overall, our results were pretty much what we had in mind. The only goal we didn
 
 ## ***II***. Customer Value
 
-The main demographic for a resume generator program is going to be unemployeed people seeking employment. Most people in this class will be in this demographic at some point in the next two years. This demographic values
+The main demographic for a resume generator program is unemployed people seeking employment. Most people in this class will be in this demographic at some point in the next two years. This demographic values
 - A clean looking product
 - An intuitive GUI
 - Low time commitment
 - Free tools
+
+All of which our program offers!
 
 There were no changes from the original project proposal.
 
