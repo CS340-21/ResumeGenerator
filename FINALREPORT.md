@@ -5,7 +5,9 @@
 - Adam McDaniel
 - Colby Smith
 
-## **_I_**. Introduction
+## ***I***. Introduction
+
+<img src="./assets/demo.gif" width="48%"/>
 
 Our project is a resume or CV generator that runs on Windows, MacOS, and Debian based Linux distributions. The resume generator prompts the user for info including: information about their previous employment, their education, a description of themselves, their contact information, their skills, and style information about the generated resume.
 
@@ -15,9 +17,19 @@ Our approach was to build the HTML generation before anything else, and then bui
 
 There we a few minor changes to the development plans: because the GUI library we used did not support file operations in the web, we couldn't download the generated resume to the user's computer.
 
+### Example Output
+
+Here are three examples, one using the default light theme, another using the [Dracula theme](https://github.com/dracula/dracula-theme), and the last using our "Forest" theme.
+
+<p float="left">
+  <img src="./assets/default-example.png" width="32%"/>
+  <img src="./assets/dracula-example.png" width="32%"/>
+  <img src="./assets/forest-example.png" width="32%"/>
+</p>
+
 Overall, our results were pretty much what we had in mind. The only goal we didn't complete was our stretch goal (web support).
 
-## **_II_**. Customer Value
+## ***II***. Customer Value
 
 The main demographic for a resume generator program is going to be unemployeed people seeking employment. Most people in this class will be in this demographic at some point in the next two years. This demographic values
 - A clean looking product
@@ -27,37 +39,30 @@ The main demographic for a resume generator program is going to be unemployeed p
 
 There were no changes from the original project proposal.
 
-## **_III_**. Technology
+## ***III***. Technology
 
-This project will be implemented using the Rust programming language. The reason we chose Rust is because Rust allows us to support compiling native Desktop applications in addition to WASM targets.
-
-Our program will consist of two parts: the binary and the library API. The library API will allow us to write platform independent implementations of the actual HTML generating portion of the resume that doesn't require a runtime. Then, on top of the API, the binary application will implement a GUI that _uses_ the library API. This way, the GUI and the resume generation are independent, and multiple frontend implementations are possible. If we choose to add a GUI implementation for a new platform, we can create a new binary that implements a new GUI on top of our API.
+This project is implemented in two halves, the library, and the application. The library contains all of the logic of converting user information into the output HTML, which the application portion of the project hooks into with its GUI.
 
 ![Flow Chart](assets/flow-chart.png)
 
-#### Risk Management
+We decided this approach from the very beginning, and it was very successful. Because we planned our architecture thoroughly beforehand, we never needed to change course.
 
-This structure has the added benefit of significantly reducing the risk of making changes to the project: changes in the binary can _only_ modify functionality of how the GUI interacts with the API, and changes in the library can _only_ modify how the API outputs HTML code. This is very good for managing risk when introducing changes to the code and the project in general.
+As for tests, our user interface is air-tight. All information is checked for validity before the application allows the user to continue. For example, all numbers are confirmed to be valid unsigned integers, and all non-optional text fields must contain text to continue. So far, we haven't been able to make the program crash *once*.
 
-#### Competing Technologies
+## ***IV***. Team
 
-1. Microsoft Word. Although this is often used for resume generation, it burdens the user with having to write the formatting themselves. It's a large time investment to write a resume in word. Our project will be focused on resumes, and will not cost money for a subscription.
-2. resume.io. This is an easier tool to use, but it requires creating an account, verifying email, and logging in to use the tool fully. It's doesn't grab peoples attention with its functionality as much as ours potentially could. Additionally, the website freezes when entering `a@a.a` as the email. Not exactly robust. Ours will aim to be quick to use, sturdy, and not require any signups.
-3. resumebuilder.indeed.com. This tool is better than the previous tool, but doesn't offer any in-depth resume options; as of now, the website only has sections for work experience and skills for the majority of its templates. Ours will offer more sections that will be available for all templates, and will have more optional features such as adding ratings for proficiency in given skills, more detailed contact information, etc.
+We didn't assign roles in our group: we only have two members. Our team members contributed equally. We split up the entire project into components, and each finished them on their own.
 
-Most other competing technologies cost money, have incomplete functionality, or are not easy to use. These all deter people from using their product.
+## ***V***. Project Management
 
-## **_IV_**. Team
+We completed all of our goals except for one stretch goal (putting the app on the web). The reason we did not add support for the web was because of the lack of support for file operations in the frontend our GUI library. Because of this flaw, we could not download the user's resume to their computer. So, we couldn't possibly complete this goal with our existing codebase.
 
-Our team is not new to writing projects like these, but one of our members has not used Rust extensively.
+## ***VI***. Reflection
 
-Our members' roles are as follows:
+Everything seemed to go well for this project: we never had a single problem throughout the whole semester, really. We set our sights on a realistic goal, and we were able to finish it without too much trouble. If anything went especially, though, it was probably the GUI implementation. We went from a terminal application, to a working GUI in *just two days*.
 
-- Adam McDaniel: responsible for backend of the project
-- Colby Smith: responsible for frontend of the project
+Planning was very simple. We used the following schedule to guide our development process.
 
-## **_V_**. Project Management
-Project meetings and management will be handled on Discord on a weekly basis. Here is a tentative schedule that will surely see changes over the course of the semester. We will follow the general guidelines from these dates and project goals.
 | Date              | Activity                                        | Goals                                                                    |
 |-------------------|-------------------------------------------------|--------------------------------------------------------------------------|
 | Thursday, Feb. 18 | Begin work on project.                          | Have a single basic template resume to feed user input into              |
@@ -70,7 +75,10 @@ Project meetings and management will be handled on Discord on a weekly basis. He
 | Friday, Apr. 9    | Final sprint                                    | Fix bugs, clean up project. add any more ideas we think of along the way |
 | Thursday, Apr. 15 | Submit project report and present final product |                                                                          |
 
-This schedule should see the project get finished by the end of the semester. We are not interested in making a profit from this project, just making it public would be ideal. As long as we have a working project by the end of the semester, this schedule will have worked.
+Team management was also incredibly simple: there are only two members in our group. We simply split up the project into simple components at the beginning of the semester, and each finished them according to schedule. Whenever we were behind schedule, we would agree to meet and work together until our goals were done.
+
+We consider our final project a massive success. Everything went as planned, we made a great looking app, and we completed it almost a month ahead of schedule. We're very satisfied with the result.
+
 ## References
 
 Formal resume definition and expectations outlined [here](https://en.wikipedia.org/wiki/R%C3%A9sum%C3%A9 "Resume Wikipedia")  
