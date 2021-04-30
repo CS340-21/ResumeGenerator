@@ -41,7 +41,7 @@ All of which our program offers. There were no changes from the original project
 
 ## ***III***. Technology
 
-This project is implemented in two halves, the library, and the application. The library contains all of the logic of converting user information into the output HTML, which the application portion of the project hooks into with its GUI.
+This project is implemented in two halves, the API, and the application. The API contains all of the logic of converting user information into the output HTML, which the application portion of the project hooks into with its GUI.
 
 ![Flow Chart](assets/flow-chart.png)
 
