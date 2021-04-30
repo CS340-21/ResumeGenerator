@@ -78,10 +78,3 @@ Planning was very simple. We used the following schedule to guide our developmen
 Team management was also incredibly simple: there are only two members in our group. We simply split up the project into simple components at the beginning of the semester, and each finished them according to schedule. Whenever we were behind schedule, we would agree to meet and work together until our goals were done.
 
 We consider our final project a massive success. Everything went as planned, we made a great looking app, and we completed it almost a month ahead of schedule. We're very satisfied with the result.
-
-## References
-
-Formal resume definition and expectations outlined [here](https://en.wikipedia.org/wiki/R%C3%A9sum%C3%A9 "Resume Wikipedia")  
-Rust [homepage](https://www.rust-lang.org/ "Rust"), [wikipedia](https://en.wikipedia.org/wiki/Rust_(programming_language))  
-[Iced GUI for rust](https://news.ycombinator.com/item?id=22766639 "ICED")  
-
